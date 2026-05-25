@@ -45,20 +45,23 @@ using StatusFlags = std::bitset<NUM_STATUS_BITS>;
 using ID = uint32_t;
 
 /// @brief Represents the side of the book the order acts in.
-enum class Side : uint8_t {
+enum class Side : uint8_t
+{
     Bid = 0,
     Ask
 };
 
 /// @brief Represents the order's matching behavior.
-enum class OrderType : uint8_t {
+enum class OrderType : uint8_t
+{
     Market = 0,
     Limit
     // ... (more support soon, starting with theseb)
 };
 
 /// @brief Represents the validity of the order (i.e. when to cancel it)
-enum class TimeInForce : uint8_t {
+enum class TimeInForce : uint8_t
+{
     GoodTilCancel,
     ImmOrCancel,
     FillOrKill
@@ -66,13 +69,14 @@ enum class TimeInForce : uint8_t {
 
 /// @brief POD type for an order that comes into the exchange. This is the order to
 /// be matched against
-struct Order {
-    Timestamp ts; // 64
-    Price price; // 64
-    Quantity qty; // 32
+struct Order
+{
+    Timestamp ts;      // 64
+    Price price;       // 64
+    Quantity qty;      // 32
     StatusFlags flags; // 32
-    ID orderId; // 32
-    ID userId; // 32
+    ID orderId;        // 32
+    ID userId;         // 32
 }; // 32 bytes, 2 per cache line, 4 for 2 line hardware prefetch.
 
 /// @brief A pair of symbol and corresponding order. Since orders do not
