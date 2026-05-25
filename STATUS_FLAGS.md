@@ -11,6 +11,7 @@ Currently, the status flags should have **32 bits** total.
 This bit represents the active state of an order. This bit should always be checked before making any trades and should be set when an order is no longer valid due to being fulfilled or canceled.
 
 | Value | Description |
+|---|---|
 | 0 | This order is inactive either by all shares filled or cancellation. |
 | 1 | This order is active with shares remaining to be filled. |
 
@@ -19,6 +20,7 @@ This bit represents the active state of an order. This bit should always be chec
 This bit represents the side of the order as `Bid` or `Ask`.
 
 | Value | Description |
+|---|---|
 | 0 | This order is a `Bid` order. |
 | 1 | This order is an `Ask` order. |
 
@@ -27,6 +29,7 @@ This bit represents the side of the order as `Bid` or `Ask`.
 These bits represent the type selected for an order. The possible order types are represented in code via the `OrderType` enum in `include/common.h`. 
 
 | Value | Type | Description |
+|---|---|---|
 | 0 | Market | This order is a market order that always matches at the best price |
 | 1 | Limit | This order is a limit order that always matches at a price at or better the limit price |
 
@@ -35,6 +38,7 @@ These bits represent the type selected for an order. The possible order types ar
 These bits represent the time in force for an order. The possible time in force types are represented in code via the `TimeInForce` enum in `include/common.h`.
 
 | Value | Type | Description |
+|---|---|---|
 | 0 | GoodTilCancel | This order will remain active until the order is canceled by the client or filled |
 | 1 | ImmOrCancel | This order will fill as many shares as it can when it is sent (as defined by the order type) and cancel the rest of the shares that cannot be filled. This order never rests on the book. |
 | 2 | FillOrKill | This order will either completely fill all shares (as defined by the order type) or cancel all shares and not trade at all. This order never rests on the book. |
