@@ -62,7 +62,7 @@ namespace statparse
     static __attribute__((always_inline)) constexpr OrderType order_type(ErrStatus &error, const StatusFlags &st)
     {
         int val{static_cast<int>(st.test(ORDER_BIT_LO)) + (static_cast<int>(st.test(ORDER_BIT_HI)) << 1)};
-        if (val > MAX_TIF_VAL)
+        if (val > MAX_ORDER_VAL)
         {
             error.set(STATUS_PARSE_LOGIC_ERROR);
         }
