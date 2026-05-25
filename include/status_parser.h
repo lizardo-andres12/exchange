@@ -5,7 +5,8 @@
 #include "common.h"
 
 /// @brief Encapsulates all order status flag parsing logic.
-namespace statparse {
+namespace statparse
+{
     /// @brief The flag parser version to use.
     static constexpr int FLAGS_VERSION = 1;
 
@@ -18,14 +19,13 @@ namespace statparse {
 
     /// @brief The bit index of the side flag.
     static constexpr size_t SIDE_BIT = 1uz;
-    
+
     /// @brief The lower bit index of the order flags.
     static constexpr size_t ORDER_BIT_LO = 2uz;
     /// @brief The higher bit index of the order flags.
     static constexpr size_t ORDER_BIT_HI = 3uz;
     /// @brief The upper bound of order type value.
     static constexpr int MAX_ORDER_VAL = 1;
-
 
     /// @brief The lower bit index of the GoodTilCancel time
     /// in force flag.
@@ -40,8 +40,8 @@ namespace statparse {
     /// @param error The error flags.
     /// @param st The status flags.
     /// @return True if active, false if not.
-    static __attribute__((always_inline)) 
-    constexpr bool order_is_active(ErrStatus& error, const StatusFlags& st) {
+    static __attribute__((always_inline)) constexpr bool order_is_active(ErrStatus &error, const StatusFlags &st)
+    {
         return st.test(ACTIVE_BIT);
     }
 
@@ -49,22 +49,21 @@ namespace statparse {
     /// @param error The error flags.
     /// @param st The status flags.
     /// @return The side of the order as an enum.
-    static __attribute__((always_inline)) 
-    constexpr Side order_side(ErrStatus& error, const StatusFlags& st) {
+    static __attribute__((always_inline)) constexpr Side order_side(ErrStatus &error, const StatusFlags &st)
+    {
         return static_cast<Side>(
-            static_cast<uint8_t>(st.test(SIDE_BIT))
-        );
+            static_cast<uint8_t>(st.test(SIDE_BIT)));
     }
 
     /// @brief Parses the type of the order from the status flags.
     /// @param error The error flags.
     /// @param st The status flags.
     /// @return The type of the order as an enum.
-    static __attribute__((always_inline)) 
-    constexpr OrderType order_type(ErrStatus& error, const StatusFlags& st) {
-        int val{ static_cast<int>(st.test(ORDER_BIT_LO))
-            + ( static_cast<int>(st.test(ORDER_BIT_HI)) << 1 ) };
-        if (val > MAX_TIF_VAL) {
+    static __attribute__((always_inline)) constexpr OrderType order_type(ErrStatus &error, const StatusFlags &st)
+    {
+        int val{static_cast<int>(st.test(ORDER_BIT_LO)) + (static_cast<int>(st.test(ORDER_BIT_HI)) << 1)};
+        if (val > MAX_TIF_VAL)
+        {
             error.set(STATUS_PARSE_LOGIC_ERROR);
         }
         return static_cast<OrderType>(val);
@@ -74,11 +73,11 @@ namespace statparse {
     /// @param error The error flags.
     /// @param st The status flags.
     /// @return The time in force of the order as an enum.
-    static __attribute__((always_inline)) 
-    constexpr TimeInForce order_time_in_force(ErrStatus& error, const StatusFlags& st) {
-        int val{ static_cast<int>(st.test(TIF_BIT_LO))
-            + ( static_cast<int>(st.test(TIF_BIT_HI)) << 1 ) };
-        if (val > MAX_TIF_VAL) {
+    static __attribute__((always_inline)) constexpr TimeInForce order_time_in_force(ErrStatus &error, const StatusFlags &st)
+    {
+        int val{static_cast<int>(st.test(TIF_BIT_LO)) + (static_cast<int>(st.test(TIF_BIT_HI)) << 1)};
+        if (val > MAX_TIF_VAL)
+        {
             error.set(STATUS_PARSE_LOGIC_ERROR);
         }
         return static_cast<TimeInForce>(val);
