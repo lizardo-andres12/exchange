@@ -6,11 +6,11 @@
 #include <cstdint>
 #include <string_view>
 
-/// @brief The flag parser version to use.
-static constexpr int FLAGS_VERSION = 1;
-
 /// @brief The number of bits used in the Status Flag Standard.
 static constexpr size_t NUM_STATUS_BITS = 32uz;
+
+/// @brief The number of bits used in error bitsets.
+static constexpr size_t NUM_ERROR_BITS = 32uz;
 
 /// @brief Nanoseconds sice UNIX epoch.
 using Timestamp = uint64_t;
@@ -32,6 +32,9 @@ static constexpr Quantity ROUND_LOT = static_cast<Quantity>(100);
 /// type, ensure that the symbol stores a stable reference to the
 /// symbol representation
 using Symbol = std::string_view; /// Store known symbols in the symbol table
+
+/// @brief The error status bitset used to indicate something went wrong.
+using ErrStatus = std::bitset<NUM_ERROR_BITS>;
 
 /// @brief Status bits per order. This should only be parsed using the dedicated
 /// parser and should adhere to the standard defined by STATUS_FLAGS.md.
