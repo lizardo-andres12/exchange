@@ -40,7 +40,7 @@ namespace statparse
     /// @param error The error flags.
     /// @param st The status flags.
     /// @return True if active, false if not.
-    static __attribute__((always_inline)) constexpr bool order_is_active(ErrStatus &error, const StatusFlags &st)
+    static __attribute__((always_inline)) constexpr bool order_is_active(const StatusFlags &st)
     {
         return st.test(ACTIVE_BIT);
     }
@@ -49,7 +49,7 @@ namespace statparse
     /// @param error The error flags.
     /// @param st The status flags.
     /// @return The side of the order as an enum.
-    static __attribute__((always_inline)) constexpr Side order_side(ErrStatus &error, const StatusFlags &st)
+    static __attribute__((always_inline)) constexpr Side order_side(const StatusFlags &st)
     {
         return static_cast<Side>(
             static_cast<uint8_t>(st.test(SIDE_BIT)));

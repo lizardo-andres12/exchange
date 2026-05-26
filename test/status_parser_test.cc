@@ -20,21 +20,21 @@ protected:
 
 TEST_F(StatusParserTest, TestFnOrderIsActive) {
     flags.reset(ACTIVE_BIT);
-    EXPECT_EQ(false, order_is_active(err, flags));
+    EXPECT_EQ(false, order_is_active(flags));
     EXPECT_EQ(0, err.count());
 
     flags.set(ACTIVE_BIT);
-    EXPECT_EQ(true, order_is_active(err, flags));
+    EXPECT_EQ(true, order_is_active(flags));
     EXPECT_EQ(0, err.count());
 }
 
 TEST_F(StatusParserTest, TestFnOrderSide) {
     flags.reset(SIDE_BIT);
-    EXPECT_EQ(Side::Bid, order_side(err, flags));
+    EXPECT_EQ(Side::Bid, order_side(flags));
     EXPECT_EQ(0, err.count());
 
     flags.set(SIDE_BIT);
-    EXPECT_EQ(Side::Ask, order_side(err, flags));
+    EXPECT_EQ(Side::Ask, order_side(flags));
     EXPECT_EQ(0, err.count());
 }
 
