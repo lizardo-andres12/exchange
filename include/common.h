@@ -75,7 +75,7 @@ struct Order
     Price price;       // 64
     Quantity qty;      // 32
     StatusFlags flags; // 32
-    ID orderId;        // 32
+    ID order_id;        // 32
     ID userId;         // 32
 }; // 32 bytes, 2 per cache line, 4 for 2 line hardware prefetch.
 
