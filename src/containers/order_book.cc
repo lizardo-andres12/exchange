@@ -42,7 +42,7 @@ namespace containers
         /// The statparse::order_side() function can only return 0 or 1
         /// static cast to Side enum, meaning it is impossible for side to
         /// be anything other than Side::Bid or Side::Ask. Thus, this is dead
-        /// code for safety.
+        /// code, but it is included to silence compiler errors.
         return pl.rend();
     }
 
