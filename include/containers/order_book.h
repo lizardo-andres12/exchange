@@ -19,10 +19,13 @@ namespace containers
     /// @brief The undefined enum error bit. Use this bit to indicate a value
     /// was passed as an enum that does not actually belong to the enum.
     static constexpr size_t UNDEFINED_ENUM_ERROR = 9;
+    /// @brief The undefined enum error bit. Use this bit to indicate a value
+    /// was passed as an enum that does not actually belong to the enum.
+    static constexpr size_t ORDER_NOT_FOUND_ERROR = 10;
 
     /// @brief An order container that behaves like the classic central order
     /// book used by many exchanges.
-    class order_book
+    class OrderBook
     {
     public:
         /// @brief Type alias for the price-specific order queue.
@@ -32,13 +35,13 @@ namespace containers
 
         /// @brief Default order book constructor. Creates an order book with
         /// DEFAULT_RESERVE_COUNT many price levels reserved on both sides.
-        explicit order_book() : order_book(DEFAULT_RESERVE_COUNT) {}
+        explicit OrderBook() : OrderBook(DEFAULT_RESERVE_COUNT) {}
 
         /// @brief Orderbook size constructor. Creates an order book with
         /// reserve_count many price levels reserved on both sides.
         /// @param reserve_count The number of price levels to reserve on both
         /// bid and ask sides.
-        explicit order_book(const size_t reserve_count)
+        explicit OrderBook(const size_t reserve_count)
             : price_levels_()
         {
             price_levels_[static_cast<size_t>(Side::Bid)].reserve(reserve_count);
@@ -50,7 +53,7 @@ namespace containers
         /// range.
         /// @param error The status bitset used to indicate an error occured.
         /// @param order The order to insert into the book
-        void insert(ErrStatus &error, const Order &order);
+        void insert(ErrStatus &error, const Order &order) noexcept;
 
         /// @brief Updates the quantity of the order keyed by order_id to contain the new quantity
         /// and shifts the ordering if the new quantity is greater than the original quantity.
@@ -64,11 +67,6 @@ namespace containers
         /// @param error The status bitset used to indicate an error occured.
         /// @param order_id The ID of the order to delete.
         void erase(ErrStatus &error, ID order_id) noexcept;
-
-        order_book(const order_book &other) = delete;
-        order_book(order_book &&other) = delete;
-        order_book &operator=(const order_book &other) = delete;
-        order_book &operator=(order_book &&other) = delete;
 
         void debug() const noexcept
         {
@@ -91,6 +89,20 @@ namespace containers
             }
         }
 
+        /// @brief Getter method for the order ID to order metadata map.
+        /// @return A const reference to the object's map.
+        const std::unordered_map<ID, PriceLevelQueue::iterator>&
+        get_order_map() const noexcept {
+            return id_order_map_;
+        }
+
+        /// @brief Getter method for the array of bid/ask price level store.
+        /// @return A const reference to the object's price level stores.
+        const std::array<PriceLevelsStructure, 2>&
+        get_price_levels() const noexcept {
+            return price_levels_;
+        }
+
     private:
         /// @brief Maps order ID to Order metadata. This will be the main store
         /// for order status.
@@ -110,33 +122,30 @@ namespace containers
         ///
         /// This method is marked noexcept because all exceptions should be caught
         /// inside the function and should set the appropriate error bits.
-        /// @param error The status bitset used to indicate an error occured.
         /// @param price The price of the price level to find.
         /// @param pl the side-specific price level structure (bid side or ask side).
         /// @return A reverse iterator pointing to the correct location of the price
         /// level.
         PriceLevelsStructure::reverse_iterator
-        __find_price_level_disptacher(ErrStatus &error, const Price price,
+        __find_price_level_disptacher(const Price price,
                                       PriceLevelsStructure &pl, const Side side) const noexcept;
 
         /// @brief Private helper for searching bid price level store.
-        /// @param error The status bitset used to indicate an error occured.
         /// @param price The price of the price level to find.
         /// @param pl the side-specific price level structure (bid side or ask side).
         /// @return A reverse iterator pointing to the correct location of the price
         /// level.
         PriceLevelsStructure::reverse_iterator
-        __find_price_level_bid(ErrStatus &error, const Price price,
+        __find_price_level_bid(const Price price,
                                PriceLevelsStructure &pl) const noexcept;
 
         /// @brief Private helper for searching ask price level store.
-        /// @param error The status bitset used to indicate an error occured.
         /// @param price The price of the price level to find.
         /// @param pl the side-specific price level structure (bid side or ask side).
         /// @return A reverse iterator pointing to the correct location of the price
         /// level.
         PriceLevelsStructure::reverse_iterator
-        __find_price_level_ask(ErrStatus &error, const Price price,
+        __find_price_level_ask(const Price price,
                                PriceLevelsStructure &pl) const noexcept;
 
         /// @brief Private helper method to add an order to the price level
@@ -147,5 +156,4 @@ namespace containers
         void __add_order(ErrStatus &error,
                          PriceLevelQueue &plq, const Order &order) noexcept;
     };
-
 };
