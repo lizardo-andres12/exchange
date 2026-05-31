@@ -7,7 +7,7 @@
 #include <string_view>
 
 /// @brief The number of bits used in the Status Flag Standard.
-static constexpr size_t NUM_STATUS_BITS = 32uz;
+static constexpr size_t NUM_STATUS_BITS = 64uz;
 
 /// @brief The number of bits used in error bitsets.
 static constexpr size_t NUM_ERROR_BITS = 32uz;
@@ -71,12 +71,25 @@ enum class TimeInForce : uint8_t
 /// be matched against
 struct Order
 {
+    StatusFlags flags; // 64 bits even with bitset<32>. Embed user ID in upper 32 bits.
     Timestamp ts;      // 64
     Price price;       // 64
     Quantity qty;      // 32
-    StatusFlags flags; // 32
-    ID order_id;        // 32
-    ID userId;         // 32
+    ID order_id;       // 32
+
+    /// @brief Overloaded equality operator that resolves to true if all fields
+    /// equal.
+    /// @param o The other Order object to check.
+    /// @return true if the objects are equal and false if not.
+    bool operator==(const Order &o) const noexcept
+    {
+        return (
+            ts == o.ts &&
+            price == o.price &&
+            qty == o.qty &&
+            flags == o.flags &&
+            order_id == o.order_id);
+    }
 }; // 32 bytes, 2 per cache line, 4 for 2 line hardware prefetch.
 
 /// @brief A pair of symbol and corresponding order. Since orders do not
