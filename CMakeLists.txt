@@ -14,7 +14,7 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 add_subdirectory(lib)
 add_subdirectory(src)
 
-option(BUILD_TESTS "Build test tarets" ON)
+option(BUILD_TESTS "Build test targets" ON)
 
 if(BUILD_TESTS)
     enable_testing()
